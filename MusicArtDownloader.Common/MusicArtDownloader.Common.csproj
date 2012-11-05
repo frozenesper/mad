@@ -42,6 +42,7 @@
     <Compile Include="Album.cs" />
     <Compile Include="Art.cs" />
     <Compile Include="Artist.cs" />
+    <Compile Include="CdArt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
