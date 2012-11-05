@@ -62,6 +62,20 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicArtDownloader.Common\MusicArtDownloader.Common.csproj">
+      <Project>{18cb8097-0e8a-46f8-a5a0-e84f29d1350e}</Project>
+      <Name>MusicArtDownloader.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MusicArtDownloader.Data\MusicArtDownloader.Data.csproj">
+      <Project>{1b7f408c-cfea-4a9f-a312-aff0caedaf87}</Project>
+      <Name>MusicArtDownloader.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MusicArtDownloader.Gui\MusicArtDownloader.Gui.csproj">
+      <Project>{6166e75e-ddca-4be9-b710-def89a3fabfe}</Project>
+      <Name>MusicArtDownloader.Gui</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

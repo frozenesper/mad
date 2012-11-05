@@ -42,6 +42,12 @@
     <Compile Include="Fanart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MusicArtDownloader.Common\MusicArtDownloader.Common.csproj">
+      <Project>{18cb8097-0e8a-46f8-a5a0-e84f29d1350e}</Project>
+      <Name>MusicArtDownloader.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
