@@ -13,7 +13,7 @@ namespace MusicArtDownloader.Data
     /// </summary>
     public class Fanart
     {
-        private static readonly Lazy<Fanart> instance = new Lazy<Fanart>(() => new Fanart(), true);
+        private static readonly Lazy<Fanart> instance = new Lazy<Fanart>(() => new Fanart());
         private string apiKey;
         private Music music;
 
