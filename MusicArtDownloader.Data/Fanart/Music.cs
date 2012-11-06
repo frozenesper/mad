@@ -30,40 +30,62 @@ namespace MusicArtDownloader.Data.Fanart
 
         public Artist ReadArtistFromXml(string xml)
         {
-            var fanart = Generated.fanart.Parse(xml);
+            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Generated.Fanart));
+
+            Generated.Fanart fanart;
+            using (var sr = new System.IO.StringReader(xml))
+            {
+                var o = serializer.Deserialize(sr);
+                fanart = (Generated.Fanart)o;
+            }
+
             var music = fanart.music;
 
             var artist = new Artist();
             artist.Id = music.id;
             artist.Name = music.name;
-            // TODO: finish loading artists
+            artist.Backgrounds = LoadArt(music.artistbackgrounds);
             artist.Albums = LoadAlbums(music.albums);
+            artist.Thumbs = LoadArt(music.artistthumbs);
+            artist.ClearLogos = LoadArt(music.musiclogos);
+            artist.HdClearLogo = LoadArt(music.hdmusiclogos);
+            artist.Banners = LoadArt(music.musicbanners);
 
             return artist;
         }
 
-        private List<Album> LoadAlbums(Generated.Albums albums)
+        private List<Album> LoadAlbums(IEnumerable<Generated.Album> albums)
         {
-            return albums.album.Select(a =>
+            return albums.Select(a =>
                 new Album()
                 {
                     Id = a.id,
-                    CdArts = a.cdart.Select(ca =>
-                        new CdArt()
-                        {
-                            Id = ca.id,
-                            Url = ca.url,
-                            Likes = ca.likes,
-                            Disc = ca.disc,
-                            Size = ca.size
-                        }).ToList(),
-                    Covers = a.albumcover.Select(ac =>
-                        new Art()
-                        {
-                            Id = ac.id,
-                            Url = ac.url,
-                            Likes = ac.likes
-                        }).ToList()
+                    CdArts = LoadCdArt(a.cdart),
+                    Covers = LoadArt(a.albumcover)
+                }).ToList();
+        }
+
+        private List<Art> LoadArt(IEnumerable<Generated.IArt> list)
+        {
+            return (list ?? new List<Generated.IArt>()).Select(a =>
+                new Art()
+                {
+                    Id = a.id,
+                    Url = new Uri(a.url),
+                    Likes = a.likes
+                }).ToList();
+        }
+
+        private List<CdArt> LoadCdArt(IEnumerable<Generated.ICdArt> list)
+        {
+            return (list ?? new List<Generated.ICdArt>()).Select(a =>
+                new CdArt()
+                {
+                    Id = a.id,
+                    Url = new Uri(a.url),
+                    Likes = a.likes,
+                    Disc = a.disc,
+                    Size = a.size
                 }).ToList();
         }
 

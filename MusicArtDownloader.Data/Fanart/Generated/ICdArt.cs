@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicArtDownloader.Common
+namespace MusicArtDownloader.Data.Fanart.Generated
 {
-    public class CdArt : Art
+    public interface ICdArt : IArt
     {
         /// <summary>
         /// Gets or sets the disc number of the art.
         /// </summary>
-        public int Disc { get; set; }
+        int disc { get; set; }
 
         /// <summary>
         /// Gets or sets the size in pixels of the art.
         /// </summary>
-        public int Size { get; set; }
+        int size { get; set; }
     }
 }

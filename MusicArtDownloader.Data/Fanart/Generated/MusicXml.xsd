@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="fanart" type="Fanart"/>
+
+  <xs:complexType name="Fanart">
+    <xs:sequence>
+      <xs:element name="music" type="Music"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Music">
+    <xs:all>
+      <xs:element name="artistbackgrounds" type="ArtistBackgrounds" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="albums" type="Albums"/>
+      <xs:element name="artistthumbs" type="ArtistThumbs" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="musiclogos" type="MusicLogos" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="hdmusiclogos" type="HDMusicLogos" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="musicbanners" type="MusicBanners" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="ArtistBackgrounds">
+    <xs:sequence>
+      <xs:element name="artistbackground" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Albums">
+    <xs:sequence>
+      <xs:element name="album" type="Album" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Album">
+    <xs:sequence>
+      <xs:element name="cdart" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="CDArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="albumcover" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="ArtistThumbs">
+    <xs:sequence>
+      <xs:element name="artistthumb" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MusicLogos">
+    <xs:sequence>
+      <xs:element name="musiclogo" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="HDMusicLogos">
+    <xs:sequence>
+      <xs:element name="hdmusiclogo" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MusicBanners">
+    <xs:sequence>
+      <xs:element name="musicbanner" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attributeGroup ref="ArtAttributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attributeGroup name="CDArtAttributes">
+    <xs:attribute name="disc" type="xs:int" use="required"/>
+    <xs:attribute name="size" type="xs:int" use="required"/>
+    <xs:attribute name="id" type="xs:int" use="required"/>
+    <xs:attribute name="url" type="xs:anyURI" use="required"/>
+    <xs:attribute name="likes" type="xs:int" use="required"/>
+    <!--<xs:attributeGroup ref="ArtAttributes"/>-->
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="ArtAttributes">
+    <xs:attribute name="id" type="xs:int" use="required"/>
+    <xs:attribute name="url" type="xs:anyURI" use="required"/>
+    <xs:attribute name="likes" type="xs:int" use="required"/>
+  </xs:attributeGroup>
+</xs:schema>

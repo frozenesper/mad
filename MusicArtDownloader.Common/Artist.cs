@@ -37,7 +37,7 @@ namespace MusicArtDownloader.Common
         /// <summary>
         /// Gets or sets a list of ClearLOGOs for the artist.
         /// </summary>
-        public List<Art> ClearLogo { get; set; }
+        public List<Art> ClearLogos { get; set; }
 
         /// <summary>
         /// Gets or sets a list of High-Definition ClearLOGOs for the artist.
@@ -47,6 +47,6 @@ namespace MusicArtDownloader.Common
         /// <summary>
         /// Gets or sets a list of banners for the artist.
         /// </summary>
-        public List<Art> Banner { get; set; }
+        public List<Art> Banners { get; set; }
     }
 }
