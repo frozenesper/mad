@@ -5,7 +5,7 @@
 
   <xs:complexType name="Fanart">
     <xs:sequence>
-      <xs:element name="music" type="Music"/>
+      <xs:element name="music" type="Music" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 

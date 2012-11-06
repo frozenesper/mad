@@ -51,6 +51,7 @@
       <DependentUpon>MusicXml.xsd</DependentUpon>
     </Compile>
     <Compile Include="Fanart\Generated\MusicXmlPartials.cs" />
+    <Compile Include="Fanart\MusicSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +66,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\@InstallationFolder)\bin\NETFX 4.0 Tools\xsd.exe" /c /n:MusicArtDownloader.Data.Fanart.Generated /o:"$(ProjectDir)Fanart\Generated" "$(ProjectDir)Fanart\Generated\MusicXml.xsd"</PreBuildEvent>
+    <!-- Including the path is a huge hack, but the alternatives don't seem to work: https://connect.microsoft.com/VisualStudio/feedback/details/583931/xsd-exe-should-be-accessible-from-ide-builds -->
+    <PreBuildEvent>"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools\xsd.exe" /c /n:MusicArtDownloader.Data.Fanart.Generated /o:"$(ProjectDir)Fanart\Generated" "$(ProjectDir)Fanart\Generated\MusicXml.xsd"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

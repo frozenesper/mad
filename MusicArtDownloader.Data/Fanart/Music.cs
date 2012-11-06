@@ -12,12 +12,12 @@ namespace MusicArtDownloader.Data.Fanart
         private const string getArtistMask = "http://fanart.tv/webservice/artist/{0}/{1}/xml/";
         private const string getAlbumMask = "http://fanart.tv/webservice/album/{0}/{1}/xml/";
         private readonly string apiKey;
-        private readonly System.Xml.Serialization.XmlSerializer serializer;
+        private readonly MusicSerializer serializer;
 
         internal Music(string apiKey)
         {
             this.apiKey = apiKey;
-            this.serializer = new System.Xml.Serialization.XmlSerializer(typeof(Generated.Fanart));
+            this.serializer = new MusicSerializer();
         }
 
         public Artist GetArtistByMusicBrainzId(string id)
@@ -30,7 +30,7 @@ namespace MusicArtDownloader.Data.Fanart
         {
             using (var stream = GetStream(url))
             {
-                return GetArtistFromStream(stream);
+                return serializer.GetArtistFromStream(stream);
             }
         }
 
@@ -46,78 +46,8 @@ namespace MusicArtDownloader.Data.Fanart
         {
             using (var sr = new System.IO.StringReader(xml))
             {
-                return GetArtistFromTextReader(sr);
+                return serializer.GetArtistFromTextReader(sr);
             }
         }
-
-        public Artist GetArtistFromTextReader(System.IO.TextReader reader)
-        {
-            var o = this.serializer.Deserialize(reader);
-            var fanart = (Generated.Fanart)o;
-            return GetArtistFromDeserializedObject(fanart);
-        }
-
-        public Artist GetArtistFromStream(System.IO.Stream stream)
-        {
-            var o = this.serializer.Deserialize(stream);
-            var fanart = (Generated.Fanart)o;
-            return GetArtistFromDeserializedObject(fanart);
-        }
-
-        #region Read Artist from Deserialized XML Object
-
-        private Artist GetArtistFromDeserializedObject(Generated.Fanart fanart)
-        {
-            var music = fanart.music;
-
-            var artist = new Artist();
-            artist.Id = music.id;
-            artist.Name = music.name;
-            artist.Backgrounds = LoadArt(music.artistbackgrounds);
-            artist.Albums = LoadAlbums(music.albums);
-            artist.Thumbs = LoadArt(music.artistthumbs);
-            artist.ClearLogos = LoadArt(music.musiclogos);
-            artist.HdClearLogo = LoadArt(music.hdmusiclogos);
-            artist.Banners = LoadArt(music.musicbanners);
-
-            return artist;
-        }
-
-        private List<Album> LoadAlbums(IEnumerable<Generated.Album> albums)
-        {
-            return albums.Select(a =>
-                new Album()
-                {
-                    Id = a.id,
-                    CdArts = LoadCdArt(a.cdart),
-                    Covers = LoadArt(a.albumcover)
-                }).ToList();
-        }
-
-        private List<Art> LoadArt(IEnumerable<Generated.IArt> list)
-        {
-            return (list ?? new List<Generated.IArt>()).Select(a =>
-                new Art()
-                {
-                    Id = a.id,
-                    Url = new Uri(a.url),
-                    Likes = a.likes
-                }).ToList();
-        }
-
-        private List<CdArt> LoadCdArt(IEnumerable<Generated.ICdArt> list)
-        {
-            return (list ?? new List<Generated.ICdArt>()).Select(a =>
-                new CdArt()
-                {
-                    Id = a.id,
-                    Url = new Uri(a.url),
-                    Likes = a.likes,
-                    Disc = a.disc,
-                    Size = a.size
-                }).ToList();
-        }
-
-        #endregion
     }
 }
