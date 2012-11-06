@@ -17,7 +17,7 @@ namespace MusicArtDownloader.Common
         /// <summary>
         /// Gets or sets the URL of the image.
         /// </summary>
-        public string Url { get; set; }
+        public Uri Url { get; set; }
 
         /// <summary>
         /// Gets the preview URL of the image.

@@ -40,10 +40,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xml.Schema.Linq, Version=2.0.2.56002, Culture=neutral, PublicKeyToken=47d0c84d0ebb13e5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\LinqToXsd.2.0.2\lib\Xml.Schema.Linq.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fanart.cs" />
-    <Compile Include="FanartApis\Music.cs" />
+    <Compile Include="FanartContext.cs" />
+    <Compile Include="Fanart\MusicXml.cs">
+      <DependentUpon>MusicXml.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Fanart\Music.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,8 +59,15 @@
       <Name>MusicArtDownloader.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Fanart\MusicXml.xsd" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)..\packages\LinqToXsd.2.0.2\tools\LinqToXsd.exe" "$(ProjectDir)Fanart\MusicXml.xsd"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

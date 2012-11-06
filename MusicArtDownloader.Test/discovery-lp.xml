@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<fanart>
+	<music id="ca4ba6af-cb9b-4877-8242-179063db6be4" name="Discovery">
+		<albums>
+			<album id="cf5d716f-463f-4fbe-9ec2-135a8cacf41f">
+				<cdart id="54300" url="http://fanart.tv/fanart/music/ca4ba6af-cb9b-4877-8242-179063db6be4/cdart/54300/lp-50644a7fcd34e.png" likes="0" disc="1" size="1000"/>
+				<albumcover id="52320" url="http://fanart.tv/fanart/music/ca4ba6af-cb9b-4877-8242-179063db6be4/albumcover/52320/lp-50594aed164bb.jpg" likes="0"/>
+			</album>
+		</albums>
+	</music>
+</fanart>

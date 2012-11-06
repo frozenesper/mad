@@ -1,4 +1,4 @@
-﻿using MusicArtDownloader.Data.FanartApis;
+﻿using MusicArtDownloader.Data.Fanart;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -11,16 +11,16 @@ namespace MusicArtDownloader.Data
     /// <summary>
     /// A class that retrieves data through the Fanart.tv API.
     /// </summary>
-    public class Fanart
+    public class FanartContext
     {
-        private static readonly Lazy<Fanart> instance = new Lazy<Fanart>(() => new Fanart());
+        private static readonly Lazy<FanartContext> instance = new Lazy<FanartContext>(() => new FanartContext());
         private string apiKey;
         private Music music;
 
         /// <summary>
         /// Initializes a new instance of the Fanart class.
         /// </summary>
-        private Fanart()
+        private FanartContext()
         {
             this.apiKey = ConfigurationManager.AppSettings["api"];
             if (String.IsNullOrWhiteSpace(apiKey))
@@ -32,7 +32,7 @@ namespace MusicArtDownloader.Data
         /// <summary>
         /// Gets the main instance of the Fanart object.
         /// </summary>
-        public static Fanart Instance { get { return instance.Value; } }
+        public static FanartContext Instance { get { return instance.Value; } }
 
         /// <summary>
         /// Gets an object that can make calls to the Fanart.tv Music API.
