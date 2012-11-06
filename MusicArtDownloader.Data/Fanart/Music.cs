@@ -9,36 +9,65 @@ namespace MusicArtDownloader.Data.Fanart
 {
     public class Music
     {
-        private const string findArtistMask = "http://fanart.tv/webservice/artist/{0}/{1}/xml/";
+        private const string getArtistMask = "http://fanart.tv/webservice/artist/{0}/{1}/xml/";
+        private const string getAlbumMask = "http://fanart.tv/webservice/album/{0}/{1}/xml/";
         private readonly string apiKey;
+        private readonly System.Xml.Serialization.XmlSerializer serializer;
+
         internal Music(string apiKey)
         {
             this.apiKey = apiKey;
+            this.serializer = new System.Xml.Serialization.XmlSerializer(typeof(Generated.Fanart));
         }
 
-        public Artist FindArtistByMusicBrainzId(string id)
+        public Artist GetArtistByMusicBrainzId(string id)
         {
-            var url = String.Format(findArtistMask, this.apiKey, id);
-            return ReadArtistFromUrl(url);
+            var url = String.Format(getArtistMask, this.apiKey, id);
+            return GetArtistFromUrl(url);
         }
 
-        private Artist ReadArtistFromUrl(string url)
+        private Artist GetArtistFromUrl(string url)
         {
-            var xml = GetXml(url);
-            return ReadArtistFromXml(xml);
+            using (var stream = GetStream(url))
+            {
+                return GetArtistFromStream(stream);
+            }
         }
 
-        public Artist ReadArtistFromXml(string xml)
+        private System.IO.Stream GetStream(string url)
         {
-            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(Generated.Fanart));
+            var client = new System.Net.Http.HttpClient();
+            var task = client.GetAsync(url);
+            var response = task.GetAwaiter().GetResult();
+            return response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+        }
 
-            Generated.Fanart fanart;
+        public Artist GetArtistFromXml(string xml)
+        {
             using (var sr = new System.IO.StringReader(xml))
             {
-                var o = serializer.Deserialize(sr);
-                fanart = (Generated.Fanart)o;
+                return GetArtistFromTextReader(sr);
             }
+        }
 
+        public Artist GetArtistFromTextReader(System.IO.TextReader reader)
+        {
+            var o = this.serializer.Deserialize(reader);
+            var fanart = (Generated.Fanart)o;
+            return GetArtistFromDeserializedObject(fanart);
+        }
+
+        public Artist GetArtistFromStream(System.IO.Stream stream)
+        {
+            var o = this.serializer.Deserialize(stream);
+            var fanart = (Generated.Fanart)o;
+            return GetArtistFromDeserializedObject(fanart);
+        }
+
+        #region Read Artist from Deserialized XML Object
+
+        private Artist GetArtistFromDeserializedObject(Generated.Fanart fanart)
+        {
             var music = fanart.music;
 
             var artist = new Artist();
@@ -89,9 +118,6 @@ namespace MusicArtDownloader.Data.Fanart
                 }).ToList();
         }
 
-        private string GetXml(string url)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }
