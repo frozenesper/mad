@@ -38,8 +38,8 @@ namespace MusicArtDownloader.Data.Fanart
         {
             var client = new System.Net.Http.HttpClient();
             var task = client.GetAsync(url);
-            var response = task.GetAwaiter().GetResult();
-            return response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+            var response = task.Result;
+            return response.Content.ReadAsStreamAsync().Result;
         }
 
         public Artist GetArtistFromXml(string xml)
