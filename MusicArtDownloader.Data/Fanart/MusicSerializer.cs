@@ -23,6 +23,13 @@ namespace MusicArtDownloader.Data.Fanart
             return GetArtist(fanart.music.First());
         }
 
+        public IEnumerable<Artist> GetArtists(System.IO.Stream stream)
+        {
+            var o = this.serializer.Deserialize(stream);
+            var fanart = (Generated.Fanart)o;
+            return GetArtists(fanart);
+        }
+
         public Artist GetArtist(System.IO.TextReader reader)
         {
             var o = this.serializer.Deserialize(reader);
@@ -155,7 +162,7 @@ namespace MusicArtDownloader.Data.Fanart
             return music;
         }
 
-        private Generated.Album[] ConvertAlbums(List<Album> list)
+        private Generated.Album[] ConvertAlbums(IEnumerable<Album> list)
         {
             return list.Select(a =>
                 new Generated.Album()
@@ -166,7 +173,7 @@ namespace MusicArtDownloader.Data.Fanart
                 }).ToArray();
         }
 
-        private T[] ConvertArt<T>(List<Art> list) where T : Generated.IArt, new()
+        private T[] ConvertArt<T>(IEnumerable<Art> list) where T : Generated.IArt, new()
         {
             return list.Select(a =>
                 new T()
@@ -177,7 +184,7 @@ namespace MusicArtDownloader.Data.Fanart
                 }).ToArray();
         }
 
-        private T[] ConvertCdArt<T>(List<CdArt> list) where T : Generated.ICdArt, new()
+        private T[] ConvertCdArt<T>(IEnumerable<CdArt> list) where T : Generated.ICdArt, new()
         {
             return list.Select(a =>
                 new T()

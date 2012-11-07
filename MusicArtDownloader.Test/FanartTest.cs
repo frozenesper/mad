@@ -47,10 +47,11 @@ namespace MusicArtDownloader.Test
             var paths = new string[] { path1, path2 };
 
             var artists = paths.Select(p => File.ReadAllText(p))
-                               .Select(x => music.GetArtistFromXml(x));
+                               .Select(x => music.GetArtistFromXml(x))
+                               .ToList();
 
             var xml = music.GetXmlFromArtists(artists);
-            var roundtrip = music.GetArtistsFromXml(xml);
+            var roundtrip = music.GetArtistsFromXml(xml).ToList();
 
             Assert.Equal(artists, roundtrip);
         }

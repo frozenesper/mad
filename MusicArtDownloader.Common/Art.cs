@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MusicArtDownloader.Common
 {
     [System.Diagnostics.DebuggerDisplay("{Id}")]
-    public class Art
+    public class Art : IEquatable<Art>
     {
         /// <summary>
         /// Gets or sets the Fanart.tv ID of the image.
@@ -28,5 +28,32 @@ namespace MusicArtDownloader.Common
         /// Gets or sets the number of likes of the image.
         /// </summary>
         public int Likes { get; set; }
+
+        #region Equality
+
+        public bool Equals(Art o)
+        {
+            return o != null &&
+                   this.Id == o.Id &&
+                   this.Url == o.Url &&
+                   this.Likes == Likes;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is Art &&
+                   this.Equals((Art)o);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 33;
+            hash = (hash * 7) + this.Id.GetHashCode();
+            hash = (hash * 7) + this.Url.GetHashCode();
+            hash = (hash * 7) + this.Likes.GetHashCode();
+            return hash;
+        }
+
+        #endregion
     }
 }
