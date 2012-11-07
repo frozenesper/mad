@@ -30,7 +30,7 @@ namespace MusicArtDownloader.Data.Fanart
         {
             using (var stream = GetStream(url))
             {
-                return serializer.GetArtistFromStream(stream);
+                return serializer.GetArtist(stream);
             }
         }
 
@@ -46,8 +46,17 @@ namespace MusicArtDownloader.Data.Fanart
         {
             using (var sr = new System.IO.StringReader(xml))
             {
-                return serializer.GetArtistFromTextReader(sr);
+                return serializer.GetArtist(sr);
             }
+        }
+
+        public string GetXmlFromArtist(Artist artist)
+        {
+            using (var sw = new System.IO.StringWriter())
+            {
+                serializer.GetFanart(sw, artist);
+                return sw.ToString();
+            }            
         }
     }
 }
