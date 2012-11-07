@@ -50,13 +50,30 @@ namespace MusicArtDownloader.Data.Fanart
             }
         }
 
+        public IEnumerable<Artist> GetArtistsFromXml(string xml)
+        {
+            using (var sr = new System.IO.StringReader(xml))
+            {
+                return serializer.GetArtists(sr);
+            }
+        }
+
         public string GetXmlFromArtist(Artist artist)
         {
             using (var sw = new System.IO.StringWriter())
             {
                 serializer.GetFanart(sw, artist);
                 return sw.ToString();
-            }            
+            }
+        }
+
+        public string GetXmlFromArtists(IEnumerable<Artist> artists)
+        {
+            using (var sw = new System.IO.StringWriter())
+            {
+                serializer.GetFanart(sw, artists);
+                return sw.ToString();
+            }
         }
     }
 }

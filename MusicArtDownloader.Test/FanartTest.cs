@@ -1,4 +1,5 @@
-﻿using MusicArtDownloader.Data;
+﻿using MusicArtDownloader.Common;
+using MusicArtDownloader.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,7 @@ namespace MusicArtDownloader.Test
 {
     public class FanartTest
     {
-        [Fact(Skip="Shouldn't hit web service on every test run.")]
+        [Fact(Skip = "Shouldn't hit web service on every test run.")]
         public void CanGetRadioheadByMusicBrainzId()
         {
             const string id = "a74b1b7f-71a5-4011-9441-d0b5e4122711";
@@ -35,6 +36,23 @@ namespace MusicArtDownloader.Test
             var roundtrip2 = music.GetXmlFromArtist(artist2);
 
             Assert.Equal(roundtrip, roundtrip2);
+        }
+
+        [Theory]
+        [InlineData("radiohead.xml", "discovery-lp.xml")]
+        public void CanCombineAndSeperateArtists(string path1, string path2)
+        {
+            var fanart = new FanartContext();
+            var music = fanart.Music;
+            var paths = new string[] { path1, path2 };
+
+            var artists = paths.Select(p => File.ReadAllText(p))
+                               .Select(x => music.GetArtistFromXml(x));
+
+            var xml = music.GetXmlFromArtists(artists);
+            var roundtrip = music.GetArtistsFromXml(xml);
+
+            Assert.Equal(artists, roundtrip);
         }
 
     }
