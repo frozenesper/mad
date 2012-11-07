@@ -13,14 +13,13 @@ namespace MusicArtDownloader.Data
     /// </summary>
     public class FanartContext
     {
-        private static readonly Lazy<FanartContext> instance = new Lazy<FanartContext>(() => new FanartContext());
         private string apiKey;
         private Music music;
 
         /// <summary>
         /// Initializes a new instance of the Fanart class.
         /// </summary>
-        private FanartContext()
+        public FanartContext()
         {
             this.apiKey = ConfigurationManager.AppSettings["api"];
             if (String.IsNullOrWhiteSpace(apiKey))
@@ -28,11 +27,6 @@ namespace MusicArtDownloader.Data
 
             this.music = new Music(this.apiKey);
         }
-
-        /// <summary>
-        /// Gets the main instance of the Fanart object.
-        /// </summary>
-        public static FanartContext Instance { get { return instance.Value; } }
 
         /// <summary>
         /// Gets an object that can make calls to the Fanart.tv Music API.
