@@ -1,46 +1,46 @@
 ﻿using MusicArtDownloader.Common;
+using MusicArtDownloader.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace MusicArtDownloader.Data.Fanart
 {
     internal class MusicSerializer
     {
-        private readonly System.Xml.Serialization.XmlSerializer serializer;
+        private readonly XmlSerializer serializer;
 
         internal MusicSerializer()
         {
-            this.serializer = new System.Xml.Serialization.XmlSerializer(typeof(Generated.Fanart));
+            this.serializer = new XmlSerializer(typeof(Generated.Fanart));
         }
 
         public Artist GetArtist(System.IO.Stream stream)
         {
-            var o = this.serializer.Deserialize(stream);
-            var fanart = (Generated.Fanart)o;
+            var fanart = (Generated.Fanart)this.serializer.Deserialize(stream);
+            if (!fanart.music.Any()) throw new FanartException("Stream does not contain any artists.");
             return GetArtist(fanart.music.First());
         }
 
         public IEnumerable<Artist> GetArtists(System.IO.Stream stream)
         {
-            var o = this.serializer.Deserialize(stream);
-            var fanart = (Generated.Fanart)o;
+            var fanart = (Generated.Fanart)this.serializer.Deserialize(stream);
             return GetArtists(fanart);
         }
 
         public Artist GetArtist(System.IO.TextReader reader)
         {
-            var o = this.serializer.Deserialize(reader);
-            var fanart = (Generated.Fanart)o;
+            var fanart = (Generated.Fanart)this.serializer.Deserialize(reader);
+            if (!fanart.music.Any()) throw new FanartException("Reader does not contain any artists.");
             return GetArtist(fanart.music.First());
         }
 
         public IEnumerable<Artist> GetArtists(System.IO.TextReader reader)
         {
-            var o = this.serializer.Deserialize(reader);
-            var fanart = (Generated.Fanart)o;
+            var fanart = (Generated.Fanart)this.serializer.Deserialize(reader);
             return GetArtists(fanart);
         }
 

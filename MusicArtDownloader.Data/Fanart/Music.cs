@@ -1,7 +1,9 @@
 ﻿using MusicArtDownloader.Common;
+using MusicArtDownloader.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,11 +14,13 @@ namespace MusicArtDownloader.Data.Fanart
         private const string getArtistMask = "http://fanart.tv/webservice/artist/{0}/{1}/xml/";
         private const string getAlbumMask = "http://fanart.tv/webservice/album/{0}/{1}/xml/";
         private readonly string apiKey;
+        private readonly HttpClient client;
         private readonly MusicSerializer serializer;
 
-        internal Music(string apiKey)
+        internal Music(string apiKey, HttpClient client)
         {
             this.apiKey = apiKey;
+            this.client = client;
             this.serializer = new MusicSerializer();
         }
 
@@ -26,18 +30,30 @@ namespace MusicArtDownloader.Data.Fanart
             return GetArtistFromUrl(url);
         }
 
+        public Artist GetAlbumByMusicBrainzId(string id)
+        {
+            var url = String.Format(getAlbumMask, this.apiKey, id);
+            return GetArtistFromUrl(url);
+        }
+
         private Artist GetArtistFromUrl(string url)
         {
             using (var stream = GetStream(url))
             {
-                return serializer.GetArtist(stream);
+                try
+                {
+                    return serializer.GetArtist(stream);
+                }
+                catch (FanartException e)
+                {
+                    throw new ArgumentOutOfRangeException("id", e);
+                }
             }
         }
 
         private System.IO.Stream GetStream(string url)
         {
-            var client = new System.Net.Http.HttpClient();
-            var task = client.GetAsync(url);
+            var task = this.client.GetAsync(url);
             var response = task.Result;
             return response.Content.ReadAsStreamAsync().Result;
         }

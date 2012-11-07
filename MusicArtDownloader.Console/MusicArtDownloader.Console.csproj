@@ -62,6 +62,10 @@
       <Project>{1b7f408c-cfea-4a9f-a312-aff0caedaf87}</Project>
       <Name>MusicArtDownloader.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MusicArtDownloader.Test\MusicArtDownloader.Test.csproj">
+      <Project>{5394ef00-89d2-4030-b848-734f931dcb29}</Project>
+      <Name>MusicArtDownloader.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

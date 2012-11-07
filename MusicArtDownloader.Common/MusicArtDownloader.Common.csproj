@@ -46,6 +46,7 @@
     <Compile Include="Art.cs" />
     <Compile Include="Artist.cs" />
     <Compile Include="CdArt.cs" />
+    <Compile Include="Exceptions\FanartException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

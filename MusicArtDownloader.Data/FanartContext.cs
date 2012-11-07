@@ -19,14 +19,21 @@ namespace MusicArtDownloader.Data
         /// <summary>
         /// Initializes a new instance of the Fanart class.
         /// </summary>
-        public FanartContext()
+        /// <param name="client">HttpClient to use for API requests.</param>
+        public FanartContext(System.Net.Http.HttpClient client)
         {
             this.apiKey = ConfigurationManager.AppSettings["api"];
             if (String.IsNullOrWhiteSpace(apiKey))
                 throw new ConfigurationErrorsException("api");
 
-            this.music = new Music(this.apiKey);
+            this.music = new Music(this.apiKey, client);
         }
+
+        /// <summary>
+        /// Initializes a new instance of the Fanart class.
+        /// </summary>
+        public FanartContext()
+            : this(new System.Net.Http.HttpClient()) { }
 
         /// <summary>
         /// Gets an object that can make calls to the Fanart.tv Music API.
