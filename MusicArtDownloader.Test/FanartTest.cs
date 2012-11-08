@@ -15,7 +15,7 @@ namespace MusicArtDownloader.Test
     public class FanartTest
     {
         [Fact]
-        public void CanGetRadioheadByMusicBrainzId()
+        public void CanGetRadioheadById()
         {
             const string id = "a74b1b7f-71a5-4011-9441-d0b5e4122711";
             var xml = File.ReadAllText("radiohead.xml");

@@ -52,6 +52,8 @@
     </Compile>
     <Compile Include="Fanart\Generated\MusicXmlPartials.cs" />
     <Compile Include="Fanart\MusicSerializer.cs" />
+    <Compile Include="MediaContext.cs" />
+    <Compile Include="ImageRetrievalContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

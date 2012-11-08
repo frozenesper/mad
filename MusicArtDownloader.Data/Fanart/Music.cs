@@ -2,6 +2,7 @@
 using MusicArtDownloader.Common.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -26,19 +27,29 @@ namespace MusicArtDownloader.Data.Fanart
 
         public Artist GetArtistByMusicBrainzId(string id)
         {
+            return GetArtistByMusicBrainzIdAsync(id).Result;
+        }
+
+        public async Task<Artist> GetArtistByMusicBrainzIdAsync(string id)
+        {
             var url = String.Format(getArtistMask, this.apiKey, id);
-            return GetArtistFromUrl(url);
+            return await GetArtistFromUrl(url);
         }
 
         public Artist GetAlbumByMusicBrainzId(string id)
         {
-            var url = String.Format(getAlbumMask, this.apiKey, id);
-            return GetArtistFromUrl(url);
+            return GetAlbumByMusicBrainzIdAsync(id).Result;
         }
 
-        private Artist GetArtistFromUrl(string url)
+        public async Task<Artist> GetAlbumByMusicBrainzIdAsync(string id)
         {
-            using (var stream = GetStream(url))
+            var url = String.Format(getAlbumMask, this.apiKey, id);
+            return await GetArtistFromUrl(url);
+        }
+
+        private async Task<Artist> GetArtistFromUrl(string url)
+        {
+            using (var stream = await GetStreamAsync(url))
             {
                 try
                 {
@@ -51,11 +62,10 @@ namespace MusicArtDownloader.Data.Fanart
             }
         }
 
-        private System.IO.Stream GetStream(string url)
+        private async Task<Stream> GetStreamAsync(string url)
         {
-            var task = this.client.GetAsync(url);
-            var response = task.Result;
-            return response.Content.ReadAsStreamAsync().Result;
+            var response = await this.client.GetAsync(url);
+            return await response.Content.ReadAsStreamAsync();
         }
 
         public Artist GetArtistFromXml(string xml)
@@ -68,9 +78,14 @@ namespace MusicArtDownloader.Data.Fanart
 
         public IEnumerable<Artist> GetArtistsFromXml(string xml)
         {
+            return GetArtistsFromXmlAsync(xml).Result;
+        }
+
+        public async Task<IEnumerable<Artist>> GetArtistsFromXmlAsync(string xml)
+        {
             using (var sr = new System.IO.StringReader(xml))
             {
-                return serializer.GetArtists(sr);
+                return await Task.Run(() => serializer.GetArtists(sr));
             }
         }
 
@@ -85,9 +100,14 @@ namespace MusicArtDownloader.Data.Fanart
 
         public string GetXmlFromArtists(IEnumerable<Artist> artists)
         {
+            return GetXmlFromArtistsAsync(artists).Result;
+        }
+
+        public async Task<string> GetXmlFromArtistsAsync(IEnumerable<Artist> artists)
+        {
             using (var sw = new System.IO.StringWriter())
             {
-                serializer.GetFanart(sw, artists);
+                await Task.Run(() => serializer.GetFanart(sw, artists));
                 return sw.ToString();
             }
         }
