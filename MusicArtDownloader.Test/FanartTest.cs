@@ -21,7 +21,7 @@ namespace MusicArtDownloader.Test
             var xml = File.ReadAllText("radiohead.xml");
             var handler = new FakeHandler(id, xml);
             var client = new HttpClient(handler);
-            using (var ctx = new FanartContext(client, true))
+            using (var ctx = new FanartContext(client: client, disposeClient: true))
             {
                 var artist = ctx.Music.GetArtistByMusicBrainzId(id);
                 Assert.Equal(artist.Name, "Radiohead");

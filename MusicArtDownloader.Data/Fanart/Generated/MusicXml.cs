@@ -60,6 +60,10 @@ namespace MusicArtDownloader.Data.Fanart.Generated {
         
         private string nameField;
         
+        private System.DateTime retrievedField;
+        
+        private bool retrievedFieldSpecified;
+        
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayItemAttribute("artistbackground", IsNullable=false)]
         public ArtistBackgroundsArtistbackground[] artistbackgrounds {
@@ -145,6 +149,28 @@ namespace MusicArtDownloader.Data.Fanart.Generated {
             }
             set {
                 this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public System.DateTime retrieved {
+            get {
+                return this.retrievedField;
+            }
+            set {
+                this.retrievedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool retrievedSpecified {
+            get {
+                return this.retrievedFieldSpecified;
+            }
+            set {
+                this.retrievedFieldSpecified = value;
             }
         }
     }

@@ -20,6 +20,7 @@
     </xs:all>
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="retrieved" type="xs:dateTime" use="optional"/>
   </xs:complexType>
 
   <xs:complexType name="ArtistBackgrounds">

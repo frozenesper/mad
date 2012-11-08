@@ -14,21 +14,29 @@ namespace MusicArtDownloader.Data
     /// </summary>
     public class FanartContext : IDisposable
     {
-        private HttpClient client;
-        private string apiKey;
-        private Music music;
+        private const string musicStorageFile = "music.xml";
+        private readonly HttpClient client;
+        private readonly string apiKey;
+        private readonly Music music;
 
         /// <summary>
         /// Initializes a new instance of the Fanart class.
         /// </summary>
         /// <param name="client">HttpClient to use for API requests.</param>
         /// <param name="disposeClient">true if the client should be disposed of by Dispose(), false if you intent to reuse the client.</param>
-        public FanartContext(HttpClient client = null, bool disposeClient = false)
+        public FanartContext(string storage = null, HttpClient client = null, bool disposeClient = false)
         {
             this.apiKey = ConfigurationManager.AppSettings["api"];
             if (String.IsNullOrWhiteSpace(apiKey))
                 throw new ConfigurationErrorsException("api");
 
+            storage = storage ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, 
+                                                                   Environment.SpecialFolderOption.Create);
+
+            storage = System.IO.Path.Combine(storage, "MusicArtDownloader");
+            System.IO.Directory.CreateDirectory(storage);
+            storage = System.IO.Path.Combine(storage, musicStorageFile);
+            
             if (client == null)
             {
                 client = new HttpClient();
@@ -37,8 +45,10 @@ namespace MusicArtDownloader.Data
 
             if (disposeClient)
                 this.client = client;
-            
-            this.music = new Music(this.apiKey, client);
+
+            this.music = new Music(apiKey: this.apiKey,
+                                   client: client,
+                                   storage: storage);
         }
 
         /// <summary>
@@ -49,7 +59,9 @@ namespace MusicArtDownloader.Data
         public void Dispose()
         {
             if (this.client != null)
-                this.client.Dispose();            
+                this.client.Dispose();
+
+            this.music.Dispose();
         }
     }
 }

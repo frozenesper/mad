@@ -83,6 +83,8 @@ namespace MusicArtDownloader.Data.Fanart
             var artist = new Artist();
             artist.Id = music.id;
             artist.Name = music.name;
+            if (music.retrievedSpecified)
+                artist.Retrieved = music.retrieved;
             artist.Backgrounds = ConvertArt(music.artistbackgrounds);
             artist.Albums = ConvertAlbums(music.albums);
             artist.Thumbs = ConvertArt(music.artistthumbs);
@@ -152,6 +154,8 @@ namespace MusicArtDownloader.Data.Fanart
 
             music.id = artist.Id;
             music.name = artist.Name;
+            music.retrievedSpecified = artist.Retrieved.HasValue;
+            music.retrieved = artist.Retrieved ?? DateTime.MaxValue;
             music.artistbackgrounds = ConvertArt<Generated.ArtistBackgroundsArtistbackground>(artist.Backgrounds);
             music.albums = ConvertAlbums(artist.Albums);
             music.artistthumbs = ConvertArt<Generated.ArtistThumbsArtistthumb>(artist.Thumbs);

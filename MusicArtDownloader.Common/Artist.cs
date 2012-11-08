@@ -20,6 +20,11 @@ namespace MusicArtDownloader.Common
         public string Id { get; set; }
 
         /// <summary>
+        /// Gets or sets the date the artist was retrieved.
+        /// </summary>
+        public DateTime? Retrieved { get; set; }
+
+        /// <summary>
         /// Gets or sets a collection of backgrounds for the artist.
         /// </summary>
         public IReadOnlyCollection<Art> Backgrounds { get; set; }
@@ -56,6 +61,7 @@ namespace MusicArtDownloader.Common
             return o != null &&
                    this.Id == o.Id &&
                    this.Name == o.Name &&
+                   this.Retrieved == o.Retrieved &&
                    this.Backgrounds.SequenceEqual(o.Backgrounds) &&
                    this.Albums.SequenceEqual(o.Albums) &&
                    this.Thumbs.SequenceEqual(o.Thumbs) &&
@@ -75,6 +81,7 @@ namespace MusicArtDownloader.Common
             int hash = 33;
             hash = (hash * 7) + this.Id.GetHashCode();
             hash = (hash * 7) + this.Name.GetHashCode();
+            hash = (hash * 7) + this.Retrieved.GetHashCode();
             hash = (hash * 7) + this.Backgrounds.GetHashCode();
             hash = (hash * 7) + this.Albums.GetHashCode();
             hash = (hash * 7) + this.Thumbs.GetHashCode();
