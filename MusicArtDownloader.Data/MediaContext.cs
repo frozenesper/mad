@@ -18,12 +18,31 @@ namespace MusicArtDownloader.Data
         {
         }
 
-        public Folder FindAllMedia(string path)
+        public async Task<Folder> FindAllFolders(string path)
         {
+            var root = new DirectoryInfo(path);
+
             if (!Directory.Exists(path))
                 throw new ArgumentException("path");
 
-            // TODO finish reading media (use taglib-sharp or id3.net?)
+            var directories = root.EnumerateDirectories("*", SearchOption.AllDirectories);
+            return await ParseNodes(root, directories);
+        }
+
+        public async Task<Folder> FindAllMedia(string path)
+        {
+            var root = new DirectoryInfo(path);
+
+            if (!root.Exists)
+                throw new ArgumentException("path");
+
+            var infos = root.EnumerateFiles("*", SearchOption.AllDirectories);
+            return await ParseNodes(root, infos);
+        }
+
+        private async Task<Folder> ParseNodes(DirectoryInfo root, IEnumerable<FileSystemInfo> infos)
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()

@@ -23,30 +23,23 @@ namespace MusicArtDownloader.Data
         /// </summary>
         /// <param name="client">HttpClient to use for API requests.</param>
         /// <param name="disposeClient">true if the client should be disposed of by Dispose(), false if you intent to reuse the client.</param>
-        public FanartContext(System.Net.Http.HttpClient client, bool disposeClient)
+        public FanartContext(HttpClient client = null, bool disposeClient = false)
         {
             this.apiKey = ConfigurationManager.AppSettings["api"];
             if (String.IsNullOrWhiteSpace(apiKey))
                 throw new ConfigurationErrorsException("api");
+
+            if (client == null)
+            {
+                client = new HttpClient();
+                disposeClient = true;
+            }
 
             if (disposeClient)
                 this.client = client;
             
             this.music = new Music(this.apiKey, client);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the Fanart class.
-        /// </summary>
-        /// <param name="client">HttpClient to use for API requests.</param>
-        public FanartContext(System.Net.Http.HttpClient client)
-            : this(client, false) { }
-
-        /// <summary>
-        /// Initializes a new instance of the Fanart class.
-        /// </summary>
-        public FanartContext()
-            : this(new System.Net.Http.HttpClient(), true) { }
 
         /// <summary>
         /// Gets an object that can make calls to the Fanart.tv Music API.
