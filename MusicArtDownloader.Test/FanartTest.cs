@@ -21,10 +21,11 @@ namespace MusicArtDownloader.Test
             var xml = File.ReadAllText("radiohead.xml");
             var handler = new FakeHandler(id, xml);
             var client = new HttpClient(handler);
-            var ctx = new FanartContext(client);
-
-            var artist = ctx.Music.GetArtistByMusicBrainzId(id);
-            Assert.Equal(artist.Name, "Radiohead");
+            using (var ctx = new FanartContext(client, true))
+            {
+                var artist = ctx.Music.GetArtistByMusicBrainzId(id);
+                Assert.Equal(artist.Name, "Radiohead");
+            }
         }
 
         [Theory]
@@ -33,34 +34,37 @@ namespace MusicArtDownloader.Test
         public void CanDeserializeAndSerializeFanartMusicApiCalls(string path)
         {
             var xml = File.ReadAllText(path);
-            var fanart = new FanartContext();
-            var music = fanart.Music;
+            using (var fanart = new FanartContext())
+            {
+                var music = fanart.Music;
 
-            var artist = music.GetArtistFromXml(xml);
-            var roundtrip = music.GetXmlFromArtist(artist);
-            var artist2 = music.GetArtistFromXml(roundtrip);
-            var roundtrip2 = music.GetXmlFromArtist(artist2);
+                var artist = music.GetArtistFromXml(xml);
+                var roundtrip = music.GetXmlFromArtist(artist);
+                var artist2 = music.GetArtistFromXml(roundtrip);
+                var roundtrip2 = music.GetXmlFromArtist(artist2);
 
-            Assert.Equal(roundtrip, roundtrip2);
+                Assert.Equal(roundtrip, roundtrip2);
+            }
         }
 
         [Theory]
         [InlineData("radiohead.xml", "discovery-lp.xml")]
         public void CanCombineAndSeperateArtists(string path1, string path2)
         {
-            var fanart = new FanartContext();
-            var music = fanart.Music;
-            var paths = new string[] { path1, path2 };
+            using (var fanart = new FanartContext())
+            {
+                var music = fanart.Music;
+                var paths = new string[] { path1, path2 };
 
-            var artists = paths.Select(p => File.ReadAllText(p))
-                               .Select(x => music.GetArtistFromXml(x))
-                               .ToList();
+                var artists = paths.Select(p => File.ReadAllText(p))
+                                   .Select(x => music.GetArtistFromXml(x))
+                                   .ToList();
 
-            var xml = music.GetXmlFromArtists(artists);
-            var roundtrip = music.GetArtistsFromXml(xml).ToList();
+                var xml = music.GetXmlFromArtists(artists);
+                var roundtrip = music.GetArtistsFromXml(xml).ToList();
 
-            Assert.Equal(artists, roundtrip);
+                Assert.Equal(artists, roundtrip);
+            }
         }
-
     }
 }

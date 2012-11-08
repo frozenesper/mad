@@ -32,7 +32,8 @@ namespace MusicArtDownloader.Test
                 return Task.Factory.StartNew(() => this.response);
             }
 
-            return base.SendAsync(request, cancellationToken);
+            throw new ArgumentException("uriContains");
+            //return base.SendAsync(request, cancellationToken);
         }
     }
 }
