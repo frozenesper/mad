@@ -38,7 +38,10 @@ namespace System.Threading
     /// <summary>Caches asynchronously retrieved data.</summary>
     /// <typeparam name="TKey">Specifies the type of the cache's keys.</typeparam>
     /// <typeparam name="TValue">Specifies the type of the cache's values.</typeparam>
-    /// <remarks>from: https://blogs.msdn.com/b/pfxteam/archive/2010/04/23/10001621.aspx?Redirected=true </remarks>
+    /// <remarks>
+    /// from: https://blogs.msdn.com/b/pfxteam/archive/2010/04/23/10001621.aspx?Redirected=true
+    /// could also use: http://codereview.stackexchange.com/questions/2025/extension-methods-to-make-concurrentdictionary-getoradd-and-addorupdate-thread-s
+    /// </remarks>
     [DebuggerTypeProxy(typeof(AsyncCache_DebugView<,>))]
     [DebuggerDisplay("Count={Count}")]
     public class AsyncCache<TKey, TValue> : ICollection<KeyValuePair<TKey, Task<TValue>>>

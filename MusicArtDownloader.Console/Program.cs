@@ -16,14 +16,6 @@ namespace MusicArtDownloader.Console
 
         static void Main(string[] args)
         {
-            const string id = "a74b1b7f-71a5-4011-9441-d0b5e4122711";
-            var xml = File.ReadAllText(radioheadFileName);
-            var handler = new MusicArtDownloader.Test.FakeHandler(id, xml);
-            var client = new HttpClient(handler);
-            using (var ctx = new FanartContext(client: client, disposeClient: true))
-            {
-                var artist = ctx.Music.GetArtistByMusicBrainzId(id);
-            }
         }
     }
 }
