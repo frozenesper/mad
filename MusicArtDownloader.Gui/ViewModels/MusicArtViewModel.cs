@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MusicArtDownloader.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -15,6 +17,8 @@ namespace MusicArtDownloader.Gui.ViewModels
         private Stopwatch stopWatch;
         private string root;
         private ICommand browseCommand;
+        private ICommand loadFoldersCommand;
+        private CancellationTokenSource cancellationTokenSource;
 
         #region Properties
 
@@ -27,6 +31,18 @@ namespace MusicArtDownloader.Gui.ViewModels
                     browseCommand = new Command(() => this.BrowseForRoot());
                 }
                 return browseCommand;
+            }
+        }
+
+        public ICommand LoadFoldersCommand
+        {
+            get
+            {
+                if (loadFoldersCommand == null)
+                {
+                    loadFoldersCommand = new AsyncCommand(() => this.SearchForFolders());
+                }
+                return loadFoldersCommand;
             }
         }
 
@@ -61,9 +77,13 @@ namespace MusicArtDownloader.Gui.ViewModels
             }
         }
 
-        private void SearchForFolders()
+        private async Task SearchForFolders()
         {
-
+            var token = this.cancellationTokenSource.Token;
+            using (var ctx = new MediaContext(this.Root))
+            {
+                var folder = await ctx.FindAllSubFoldersAsync();
+            }
         }
 
         void Tick(object sender, EventArgs e)
@@ -74,6 +94,7 @@ namespace MusicArtDownloader.Gui.ViewModels
         public MusicArtViewModel()
         {
             SetupTimer();
+            this.cancellationTokenSource = new CancellationTokenSource();
         }
 
         private void SetupTimer()

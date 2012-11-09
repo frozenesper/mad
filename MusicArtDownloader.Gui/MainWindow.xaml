@@ -11,7 +11,8 @@
             <DockPanel HorizontalAlignment="Stretch" Height="Auto">
                 <Label x:Name="BrowseLabel" Content="Music Library:" />
                 <Button x:Name="LoadButton" DockPanel.Dock="Right" HorizontalAlignment="Right" 
-                        Content="Go" IsDefault="True" ToolTip="Load your music library." Margin="10,0,0,0" Padding="10,1" />
+                        Content="Go" IsDefault="True" ToolTip="Load your music library." Margin="10,0,0,0" Padding="10,1"
+                        Command="{Binding Path=LoadFoldersCommand}"/>
                 <Button x:Name="BrowseButton" DockPanel.Dock="Right" HorizontalAlignment="Right" 
         			    Content="Browse" IsDefault="True" ToolTip="Browse for the root folder of your music library."
                         Command="{Binding Path=BrowseCommand}"/>

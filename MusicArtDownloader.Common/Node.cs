@@ -12,12 +12,18 @@ namespace MusicArtDownloader.Common
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets the Path of the item.
+        /// </summary>
+        public string Path { get; set; }
+
         #region Equality
 
         public bool Equals(Node o)
         {
             return o != null &&
-                   this.Name == o.Name;
+                   this.Name == o.Name &&
+                   this.Path == o.Path;
         }
 
         public override bool Equals(object o)
@@ -30,6 +36,7 @@ namespace MusicArtDownloader.Common
         {
             int hash = 33;
             hash = (hash * 7) + this.Name.GetHashCode();
+            hash = (hash * 7) + this.Path.GetHashCode();
             return hash;
         }
 

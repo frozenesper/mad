@@ -33,6 +33,7 @@ namespace MusicArtDownloader.Data.Fanart
                 {
                     return GetArtistByMusicBrainzIdInternalAsync(id);
                 });
+            
             this.Load();
         }
 
@@ -135,13 +136,21 @@ namespace MusicArtDownloader.Data.Fanart
             this.Save();
         }
 
+        /// <summary>
+        /// Saves all cached Artists to persistence.
+        /// </summary>
         public void Save()
         {
             lock (this)
             {
                 var values = Task.WhenAll(this.cache.Values).Result;
 
+                if (!values.Any())
+                    return;
+
                 var fanart = this.GetXmlFromArtistsAsync(values);
+
+                // Copy the existing save to an alternate location, just in case...
                 if (File.Exists(this.storage))
                 {
                     File.Delete(Path.ChangeExtension(this.storage, "bak"));
@@ -152,6 +161,9 @@ namespace MusicArtDownloader.Data.Fanart
             }
         }
 
+        /// <summary>
+        /// Load all Artists from persistence into cache.
+        /// </summary>
         public void Load()
         {
             lock (this)

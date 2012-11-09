@@ -10,39 +10,51 @@ namespace MusicArtDownloader.Data
 {
     public class MediaContext : IDisposable
     {
+        private readonly Folder root;
 
         /// <summary>
         /// Initializes a new instance of the FileSystemContext class.
         /// </summary>
-        public MediaContext()
+        /// <param name="root">Root folder of the media library.</param>
+        public MediaContext(string root)
         {
+            this.root = new Folder()
+            {
+                Name = Path.GetDirectoryName(root),
+                Path = root
+            };
         }
 
-        public async Task<Folder> FindAllFolders(string path)
-        {
-            var root = new DirectoryInfo(path);
+        /// <summary>
+        /// Gets the root folder of the media library.
+        /// </summary>
+        public Folder Root { get { return this.root; } }
 
-            if (!Directory.Exists(path))
+        public async Task<Folder> FindAllSubFoldersAsync()
+        {
+            if (!Directory.Exists(this.root.Path))
                 throw new ArgumentException("path");
 
-            var directories = root.EnumerateDirectories("*", SearchOption.AllDirectories);
-            return await ParseNodes(root, directories);
+            var dir = new DirectoryInfo(this.root.Path);
+            var directories = await Task.Run(() => dir.EnumerateDirectories("*", SearchOption.AllDirectories));
+            return await ParseNodesAsync(this.root, directories);
         }
 
-        public async Task<Folder> FindAllMedia(string path)
+        public async Task<Folder> FindAllMediaAsync()
         {
-            var root = new DirectoryInfo(path);
+            var dir = new DirectoryInfo(this.root.Path);
 
-            if (!root.Exists)
+            if (!dir.Exists)
                 throw new ArgumentException("path");
 
-            var infos = root.EnumerateFiles("*", SearchOption.AllDirectories);
-            return await ParseNodes(root, infos);
+            var files = await Task.Run(() => dir.EnumerateFiles("*", SearchOption.AllDirectories));
+            return await ParseNodesAsync(root, files);
         }
 
-        private async Task<Folder> ParseNodes(DirectoryInfo root, IEnumerable<FileSystemInfo> infos)
+        private async Task<Folder> ParseNodesAsync(Folder root, IEnumerable<FileSystemInfo> infos)
         {
-            throw new NotImplementedException();
+            var nodes = infos.ToList();
+            return root;
         }
 
         public void Dispose()

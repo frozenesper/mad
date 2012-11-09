@@ -11,11 +11,17 @@ namespace MusicArtDownloader.Console
 {
     class Program
     {
+        const string root = @"\\hda\music\albums";
         const string radioheadFileName = @"C:\Users\sachin\Documents\Visual Studio 2012\Projects\mad\MusicArtDownloader.Test\radiohead.xml";
         const string discoveryFileName = @"C:\Users\sachin\Documents\Visual Studio 2012\Projects\mad\MusicArtDownloader.Test\discovery-lp.xml";
 
         static void Main(string[] args)
         {
+            var xml = File.ReadAllText(radioheadFileName);
+            using (var ctx = new MediaContext(root))
+            {
+                var folder = ctx.FindAllSubFoldersAsync().Result;
+            }
         }
     }
 }
