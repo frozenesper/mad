@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:ViewModels="clr-namespace:MusicArtDownloader.Gui.ViewModels" 
         x:Class="MusicArtDownloader.Gui.MainWindow"
+        xmlns:Controls="clr-namespace:MusicArtDownloader.Gui.Controls"
         Title="Music Art Downloader" Height="350" Width="525">
     <Window.DataContext>
         <ViewModels:MusicArtViewModel />
@@ -10,16 +11,21 @@
         <StackPanel>
             <DockPanel HorizontalAlignment="Stretch" Height="Auto">
                 <Label x:Name="BrowseLabel" Content="Music Library:" />
-                <Button x:Name="LoadButton" DockPanel.Dock="Right" HorizontalAlignment="Right" 
-                        Content="Go" IsDefault="True" ToolTip="Load your music library." Margin="10,0,0,0" Padding="10,1"
+                <Button x:Name="CancelButton" DockPanel.Dock="Right" IsCancel="True" 
+        			    Content="Cancel" ToolTip="Cancel" Margin="10,0,0,0" Padding="10,1"
+                        Command="{Binding Path=CancelCommand}"/>
+                <Button x:Name="LoadButton" DockPanel.Dock="Right" IsDefault="True"
+                        Content="Go" ToolTip="Load your music library." Margin="10,0,0,0" Padding="10,1"
                         Command="{Binding Path=LoadFoldersCommand}"/>
-                <Button x:Name="BrowseButton" DockPanel.Dock="Right" HorizontalAlignment="Right" 
-        			    Content="Browse" IsDefault="True" ToolTip="Browse for the root folder of your music library."
+                <Button x:Name="BrowseButton" DockPanel.Dock="Right"
+        			    Content="Browse" ToolTip="Browse for the root folder of your music library."
                         Command="{Binding Path=BrowseCommand}"/>
                 <TextBox x:Name="BrowseTextBox" Margin="0,1,10,0" 
                          Text="{Binding Root}"/>
             </DockPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Controls:GifImage GifSource="pack://application:,,,load-circle.gif" AutoStart="True" />
+            </StackPanel>
             <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top"  Margin="10,10,10,0" Height="250" ScrollViewer.VerticalScrollBarVisibility="Auto" CanVerticallyScroll="True"/>
         </StackPanel>
     </Grid>

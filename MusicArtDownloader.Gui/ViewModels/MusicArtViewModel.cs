@@ -1,6 +1,8 @@
-﻿using MusicArtDownloader.Data;
+﻿using MusicArtDownloader.Common;
+using MusicArtDownloader.Data;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -18,7 +20,10 @@ namespace MusicArtDownloader.Gui.ViewModels
         private string root;
         private ICommand browseCommand;
         private ICommand loadFoldersCommand;
+        private ICommand cancelCommand;
         private CancellationTokenSource cancellationTokenSource;
+        private bool canCancel;
+        private bool canLoad;
 
         #region Properties
 
@@ -43,6 +48,18 @@ namespace MusicArtDownloader.Gui.ViewModels
                     loadFoldersCommand = new AsyncCommand(() => this.SearchForFolders());
                 }
                 return loadFoldersCommand;
+            }
+        }
+
+        public ICommand CancelCommand
+        {
+            get
+            {
+                if (cancelCommand == null)
+                {
+                    cancelCommand = new Command(() => this.cancellationTokenSource.Cancel());
+                }
+                return cancelCommand;
             }
         }
 
@@ -83,9 +100,31 @@ namespace MusicArtDownloader.Gui.ViewModels
             using (var ctx = new MediaContext(this.Root))
             {
                 var folder = await ctx.FindAllSubFoldersAsync();
+                folder.Items.CollectionChanged += ArtistCollectionChanged;
             }
         }
 
+        private void ArtistCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (var newItem in e.NewItems.OfType<Folder>())
+            {
+                newItem.Items.CollectionChanged += AlbumCollectionChanged;
+            }
+        }
+
+        private void AlbumCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (var newItem in e.NewItems.OfType<Folder>())
+            {
+                newItem.Items.CollectionChanged += SongCollectionChanged;
+            }
+        }
+
+        private void SongCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
+        }
+        
         void Tick(object sender, EventArgs e)
         {
             throw new NotImplementedException();

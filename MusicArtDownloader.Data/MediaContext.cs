@@ -53,7 +53,7 @@ namespace MusicArtDownloader.Data
 
         private async Task<Folder> ParseNodesAsync(Folder root, IEnumerable<FileSystemInfo> infos)
         {
-            var nodes = infos.ToList();
+            var nodes = await Task<List<FileSystemInfo>>.Run(() => infos.ToList());
             return root;
         }
 

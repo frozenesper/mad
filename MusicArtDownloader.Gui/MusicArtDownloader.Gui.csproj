@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="AsyncCommand.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="Controls\GifImage.cs" />
     <Compile Include="ViewModels\MusicArtViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Page Include="MainWindow.xaml">
@@ -113,7 +114,10 @@
       <Name>MusicArtDownloader.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="load-circle.gif" />
+    <Resource Include="load-line.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
